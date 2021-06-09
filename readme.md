@@ -1,5 +1,7 @@
 # Parallel estimation for the Kansenkaart on the OSSC
 
+![pipeline.png](pipeline.png)
+
 This repository holds the code for parallel estimation of the Kansenkaart project estimates on the ODISSEI Secure Supercomputer.
 
 This is a work in progress!
