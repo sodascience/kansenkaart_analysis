@@ -2,6 +2,7 @@
 library(tidyverse)
 library(feather)
 library(readxl)
+library(haven)
 
 # Resource locations ----
 vslgwb_location <- "../cbs_validationdata/cbsdata/BouwenWonen/VSLGWBTAB/VSLGWB2019TAB03V1.sav"
@@ -94,7 +95,7 @@ model_grid <-
   left_join(regions, by = "region_type") %>% 
   unnest_longer(region_id) %>%
   mutate(region_id = as_factor(region_id), region_type = as_factor(region_type)) %>% 
-  select(outcome, data_source, income_group, gender_group, migration_group, region_type, region_id)
+  select(outcome, binary, data_source, income_group, gender_group, migration_group, region_type, region_id)
 
 # Write the entire model grid as a feather file (can be read by row or by column)
 write_feather(model_grid, "data/model_grid.feather")

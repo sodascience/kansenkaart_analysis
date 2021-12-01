@@ -646,6 +646,13 @@
       "Repository": "CRAN",
       "Hash": "aa57ed55ff2df4bea697a07df528993d"
     },
+    "writexl": {
+      "Package": "writexl",
+      "Version": "1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a012c4b3bbd4e2ef837f045db2ffd2ec"
+    },
     "xfun": {
       "Package": "xfun",
       "Version": "0.12",
