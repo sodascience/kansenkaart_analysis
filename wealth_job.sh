@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH -n 1
-#SBATCH -t 24:00:00
+#SBATCH --exclusive
+#SBATCH -t 10:00:00
 #SBATCH -p comp_env
 #SBATCH -o ./logs/output.%a.out
 

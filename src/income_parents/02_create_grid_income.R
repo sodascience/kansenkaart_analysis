@@ -40,7 +40,6 @@ outcome_source <- tribble(
   "c30_home_wealth",                FALSE,      "main_cohort",
   "c30_gifts_received",             TRUE,       "main_cohort",
   "c30_sum_gifts",                  FALSE,      "main_cohort",
-  "c30_young_mothers",              TRUE,       "main_cohort",
   "c30_household_income",           FALSE,      "main_cohort",
   "c30_household_income_perc",      FALSE,      "main_cohort",
   "c30_living_space_pp",            FALSE,      "main_cohort",
@@ -59,6 +58,11 @@ outcome_source <- tribble(
   "c16_youth_health_costs",         FALSE,      "high_school_cohort",
   "c16_living_space_pp",            FALSE,      "high_school_cohort",
   
+  "c16_secondary_class_foreign_born_parents", TRUE, "high_school_cohort",
+  "c16_secondary_class_income_below_25th",    TRUE, "high_school_cohort",
+  "c16_secondary_class_income_below_50th",    TRUE, "high_school_cohort",
+  "c16_secondary_class_income_above_75th",    TRUE, "high_school_cohort",
+  
   "c11_math",                       TRUE,       "elementary_school_cohort",
   "c11_reading",                    TRUE,       "elementary_school_cohort",
   "c11_language",                   TRUE,       "elementary_school_cohort",
@@ -74,16 +78,17 @@ outcome_source <- tribble(
   "c11_youth_health_costs",         FALSE,      "elementary_school_cohort",
   "c11_living_space_pp",            FALSE,      "elementary_school_cohort",
   
-  "c11_class_vmbo_gl_test",         TRUE,       "classroom_cohort",
-  "c11_class_havo_test",            TRUE,       "classroom_cohort",
-  "c11_class_vwo_test",             TRUE,       "classroom_cohort",
-  "c11_class_size",                 FALSE,      "classroom_cohort",
-  "c11_class_foreign_born_parents", TRUE,       "classroom_cohort",
-  "c11_class_math",                 TRUE,       "classroom_cohort",
-  "c11_class_language",             TRUE,       "classroom_cohort",
-  "c11_class_reading",              TRUE,       "classroom_cohort",
-  "c11_class_income_below_25th",    TRUE,       "classroom_cohort",
-  "c11_class_income_above_75th",    TRUE,       "classroom_cohort",
+  "c11_class_vmbo_gl_test",         FALSE,       "elementary_school_cohort",
+  "c11_class_havo_test",            FALSE,       "elementary_school_cohort",
+  "c11_class_vwo_test",             FALSE,       "elementary_school_cohort",
+  "c11_class_size",                 FALSE,       "elementary_school_cohort",
+  "c11_class_foreign_born_parents", FALSE,       "elementary_school_cohort",
+  "c11_class_math",                 FALSE,       "elementary_school_cohort",
+  "c11_class_language",             FALSE,       "elementary_school_cohort",
+  "c11_class_reading",              FALSE,       "elementary_school_cohort",
+  "c11_class_income_below_25th",    FALSE,       "elementary_school_cohort",
+  "c11_class_income_below_50th",    FALSE,       "elementary_school_cohort",
+  "c11_class_income_above_75th",    FALSE,       "elementary_school_cohort",
   
   "c00_sga",                        TRUE,       "perinatal_cohort",
   "c00_preterm_birth",              TRUE,       "perinatal_cohort",
@@ -171,27 +176,4 @@ model_grid <-
 
 # Write the entire model grid as a feather file (can be read by row or by column)
 write_feather(model_grid, "input/income/model_grid.feather")
-
-
-#----------------------
-
-# create subset
-# model_grid_subset <- model_grid[1:10000, ]
-
-
-# Write the entire model grid as a feather file (can be read by row or by column)
-# write_feather(model_grid_subset, "input/income/model_grid.feather")
-
-
-#----------------------
-
-# # create selected
-# model_grid_selected <-
-#   model_grid %>%
-#   filter(!(region_type == 'corop_code' & data_source != 'main_cohort'))
-#   
-# 
-# # Write the entire model grid as a feather file (can be read by row or by column)
-# write_feather(model_grid_selected, "input/income/model_grid.feather")
-
 
