@@ -56,12 +56,12 @@ outcome_source <- tribble(
   "c16_vwo",                        TRUE,       "high_school_cohort",
   "c16_youth_protection",           TRUE,       "high_school_cohort",
   "c16_youth_health_costs",         FALSE,      "high_school_cohort",
-  "c16_living_space_pp",            FALSE,      "high_school_cohort",
+  "c16_living_space_pp",            FALSE,      "high_school_cohort", 
   
-  "c16_secondary_class_foreign_born_parents", TRUE, "high_school_cohort",
-  "c16_secondary_class_income_below_25th",    TRUE, "high_school_cohort",
-  "c16_secondary_class_income_below_50th",    TRUE, "high_school_cohort",
-  "c16_secondary_class_income_above_75th",    TRUE, "high_school_cohort",
+  "c16_secondary_class_foreign_born_parents", FALSE, "high_school_cohort", 
+  "c16_secondary_class_income_below_25th",    FALSE, "high_school_cohort", 
+  "c16_secondary_class_income_below_50th",    FALSE, "high_school_cohort", 
+  "c16_secondary_class_income_above_75th",    FALSE, "high_school_cohort", 
   
   "c11_math",                       TRUE,       "elementary_school_cohort",
   "c11_reading",                    TRUE,       "elementary_school_cohort",
@@ -90,15 +90,13 @@ outcome_source <- tribble(
   "c11_class_income_below_50th",    FALSE,       "elementary_school_cohort",
   "c11_class_income_above_75th",    FALSE,       "elementary_school_cohort",
   
-  "c00_sga",                        TRUE,       "perinatal_cohort",
-  "c00_preterm_birth",              TRUE,       "perinatal_cohort",
+  "c00_sga",                        TRUE,        "perinatal_cohort",
+  "c00_preterm_birth",              TRUE,        "perinatal_cohort",
   
-  "c00_perinatal_mortality",        TRUE,       "child_mortality_cohort",
-  "c00_neonatal_mortality",         TRUE,       "child_mortality_cohort",
-  "c00_infant_mortality",           TRUE,       "child_mortality_cohort"
+  "c00_perinatal_mortality",        TRUE,        "child_mortality_cohort",
+  "c00_neonatal_mortality",         TRUE,        "child_mortality_cohort",
+  "c00_infant_mortality",           TRUE,        "child_mortality_cohort"
 )
-
-
 
 # Predictors
 wealth_groups    <- c("all", "High", "Mid", "Low")
@@ -113,20 +111,10 @@ gwb_tab <- read_spss(gwb_location) %>% select(-postcode_crypt) %>% distinct()
 corop_tab <- read_xlsx(corop_location)
 
 
-# convert to gemeente-indeling 2023
-gwb_tab <- 
-  gwb_tab %>% 
-  mutate(gemcode = 
-           ifelse(gemcode %in% c("0501", "0530", "0614"), 
-                  "1992", gemcode), 
-         gemcode = ifelse(gemcode == '0457', "0363", gemcode))
-
-
-
 regions <- tribble(
   ~region_type,    ~region_id, 
   "all",           "all",
-  "corop_code",    unique(as.character(corop_tab$COROP2022)),
+  #"corop_code",    unique(as.character(corop_tab$COROP2023)),
   "postcode3",     unique(substr(pc4_tab$postc, 1, 3)),
   "postcode4",     unique(substr(pc4_tab$postc, 1, 4)),
   "gemeente_code", unique(as.character(gwb_tab$gemcode)),
@@ -164,12 +152,6 @@ model_grid <-
                               paste0(region_type, '_birth'), region_type)) %>%
   mutate(region_type = as_factor(region_type))
 
-
-# remove corop-level for younger cohorts other than main cohort
-model_grid <-
-  model_grid %>%
-  filter(!(region_type == 'corop_code' & data_source != 'main_cohort')) %>%
-  filter(region_type != 'corop_code_birth')
 
 
 # Write the entire model grid as a feather file (can be read by row or by column)

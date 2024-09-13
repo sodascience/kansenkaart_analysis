@@ -31,15 +31,16 @@ tcat("Setting up chunks")
 # each node has 128 cores, use 96
 n_cores  <- 96
 # each core can estimate about 14 models per second
-mod_rate <- 14
+mod_rate <- 4
 # we want to run each job for about 1 hour (3600 seconds)
 job_time <- 3600
 # get final chunk size
 chunk_size <- n_cores*mod_rate*job_time
 
+
+
 # then we get the current task id and assign the right chunk to the current job
-#n_total   <- feather_metadata(file.path(data_dir, "educ/model_grid.feather"))$dim[1]
-n_total   <- feather_metadata(file.path(data_dir, "educ/model_grid_subset.feather"))$dim[1]
+n_total   <- feather_metadata(file.path(data_dir, "educ/model_grid.feather"))$dim[1]
 chunk_idx <- ((task_id - 1)*chunk_size + 1):min(task_id*chunk_size, n_total)
 
 

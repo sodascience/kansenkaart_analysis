@@ -4,6 +4,7 @@
 # R script for computing expectations in slurm array jobs
 # usage: Rscript 03_array_job.R $SLURM_ARRAY_TASK_ID input
 
+
 # Setting up logging ----
 start <- Sys.time()
 tcat <- function(...) {

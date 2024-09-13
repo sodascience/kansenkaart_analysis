@@ -7,8 +7,7 @@ data_dir <- "input/income"
 output_dir <- "output/income"
 
 # read the model grid into memory (big!)
-# model_grid <- read_feather(file.path(data_dir, "model_grid.feather"))
-model_grid <- read_feather(file.path(data_dir, "model_grid_subset.feather"))
+model_grid <- read_feather(file.path(data_dir, "model_grid.feather"))
 n_total <- nrow(model_grid)
 
 # add new columns
@@ -22,12 +21,25 @@ chunk_size <- nrow(read_rds(files[1]))
 
 for (fn in files) {
   cat(fn, "\n")
+  
   task_id <- parse_number(fn)
+  
   chunk_idx <- ((task_id - 1)*chunk_size + 1):min(task_id*chunk_size, n_total)
-  model_grid[chunk_idx, 10:13] <- read_rds(fn)
+
+  # model_grid[chunk_idx, 10:13] <- read_rds(fn)
+
+  if (task_id != parse_number(files[length(files)])){
+    model_grid[chunk_idx, 10:13] <- read_rds(fn)
+
+  } else {
+    model_grid[chunk_idx, 10:13] <- read_rds(fn)[1:length(chunk_idx), ]
+
+  }
+  
 }
 
 # write the results to disk
 write_rds(model_grid, file.path(output_dir, "expectation_grid.rds")) 
 # CHANGE FILE PATHS
+
 

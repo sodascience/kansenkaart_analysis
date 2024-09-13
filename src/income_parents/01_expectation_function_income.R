@@ -44,8 +44,6 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
     cohort_dat <- cohort_dat %>% filter(geslacht == gender_grp)
   }
   
-  
-  
   ## region ----
   if (region_type != "all") {
     cohort_dat <- cohort_dat %>% filter(.data[[region_type]] == region_id)

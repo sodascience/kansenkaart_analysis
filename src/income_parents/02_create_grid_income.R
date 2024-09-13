@@ -44,24 +44,24 @@ outcome_source <- tribble(
   "c30_household_income_perc",      FALSE,      "main_cohort",
   "c30_living_space_pp",            FALSE,      "main_cohort",
   "c30_age_left_parents",           FALSE,      "main_cohort",
-  
+
   "c21_high_school_attained",       TRUE,       "students_cohort",
   "c21_hbo_followed",               TRUE,       "students_cohort",
   "c21_uni_followed",               TRUE,       "students_cohort",
   "c21_living_with_parents",        TRUE,       "students_cohort",
   "c21_young_parents",              TRUE,       "students_cohort",
-  
+
   "c16_vmbo_gl",                    TRUE,       "high_school_cohort",
   "c16_havo",                       TRUE,       "high_school_cohort",
   "c16_vwo",                        TRUE,       "high_school_cohort",
   "c16_youth_protection",           TRUE,       "high_school_cohort",
   "c16_youth_health_costs",         FALSE,      "high_school_cohort",
   "c16_living_space_pp",            FALSE,      "high_school_cohort",
-  
-  "c16_secondary_class_foreign_born_parents", TRUE, "high_school_cohort",
-  "c16_secondary_class_income_below_25th",    TRUE, "high_school_cohort",
-  "c16_secondary_class_income_below_50th",    TRUE, "high_school_cohort",
-  "c16_secondary_class_income_above_75th",    TRUE, "high_school_cohort",
+
+  "c16_secondary_class_foreign_born_parents", FALSE, "high_school_cohort",
+  "c16_secondary_class_income_below_25th",    FALSE, "high_school_cohort",
+  "c16_secondary_class_income_below_50th",    FALSE, "high_school_cohort",
+  "c16_secondary_class_income_above_75th",    FALSE, "high_school_cohort",
   
   "c11_math",                       TRUE,       "elementary_school_cohort",
   "c11_reading",                    TRUE,       "elementary_school_cohort",
@@ -90,12 +90,12 @@ outcome_source <- tribble(
   "c11_class_income_below_50th",    FALSE,       "elementary_school_cohort",
   "c11_class_income_above_75th",    FALSE,       "elementary_school_cohort",
   
-  "c00_sga",                        TRUE,       "perinatal_cohort",
-  "c00_preterm_birth",              TRUE,       "perinatal_cohort",
+  "c00_sga",                        TRUE,        "perinatal_cohort",
+  "c00_preterm_birth",              TRUE,        "perinatal_cohort",
   
-  "c00_perinatal_mortality",        TRUE,       "child_mortality_cohort",
-  "c00_neonatal_mortality",         TRUE,       "child_mortality_cohort",
-  "c00_infant_mortality",           TRUE,       "child_mortality_cohort"
+  "c00_perinatal_mortality",        TRUE,        "child_mortality_cohort",
+  "c00_neonatal_mortality",         TRUE,        "child_mortality_cohort",
+  "c00_infant_mortality",           TRUE,        "child_mortality_cohort"
 )
 
 
@@ -112,16 +112,6 @@ household_groups <- c("all", "two parents", "single parent")
 pc4_tab <- read_spss(pwr_location) %>% select(postc)
 gwb_tab <- read_spss(gwb_location) %>% select(-postcode_crypt) %>% distinct()
 corop_tab <- read_xlsx(corop_location)
-
-
-# convert to gemeente-indeling 2023
-gwb_tab <- 
-  gwb_tab %>% 
-  mutate(gemcode = 
-           ifelse(gemcode %in% c("0501", "0530", "0614"), 
-                  "1992", gemcode), 
-         gemcode = ifelse(gemcode == '0457', "0363", gemcode))
-
 
 
 regions <- tribble(
@@ -176,4 +166,5 @@ model_grid <-
 
 # Write the entire model grid as a feather file (can be read by row or by column)
 write_feather(model_grid, "input/income/model_grid.feather")
+
 

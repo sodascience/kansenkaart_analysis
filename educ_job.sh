@@ -1,13 +1,14 @@
 #!/bin/bash
-#SBATCH -n 1
-#SBATCH -t 12:00:00
+#SBATCH -N 1
+#SBATCH --exclusive
+#SBATCH -t 10:00:00
 #SBATCH -p comp_env
-#SBATCH -o ./logs/output.%a.out
+#SBATCH -o ./logs/educ/output.%a.out
 
 # loading modules
 echo "Loading modules"
 module load 2022
-module load R
+module load R/4.2.1-foss-2022a
 
 # running script
 echo "Starting R script..."

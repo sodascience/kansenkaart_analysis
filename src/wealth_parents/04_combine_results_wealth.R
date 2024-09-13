@@ -3,7 +3,7 @@
 library(tidyverse)
 library(feather)
 
-data_dir <- "input"
+data_dir <- "input/wealth"
 output_dir <- "output/wealth"
 
 # read the model grid into memory (big!)
@@ -14,17 +14,28 @@ n_total <- nrow(model_grid)
 model_grid <- model_grid %>% mutate(est = NA_real_, lwr = NA_real_, upr = NA_real_, n = NA_real_)
 
 # fill the new columns with info from array job files
-files <- list.files("output", full.names = TRUE)
+files <- list.files(output_dir, full.names = TRUE)
 
 # get chunk size for first file
 chunk_size <- nrow(read_rds(files[1]))
 
+
 for (fn in files) {
   cat(fn, "\n")
   task_id <- parse_number(fn)
+
   chunk_idx <- ((task_id - 1)*chunk_size + 1):min(task_id*chunk_size, n_total)
-  model_grid[chunk_idx, 9:12] <- read_rds(fn)
+  # model_grid[chunk_idx, 10:13] <- read_rds(fn)
+  
+  if (task_id != parse_number(files[length(files)])){
+    model_grid[chunk_idx, 10:13] <- read_rds(fn)
+    
+  } else {
+    model_grid[chunk_idx, 10:13] <- read_rds(fn)[1:length(chunk_idx), ]
+    
+  }
 }
+
 
 # write the results to disk
 write_rds(model_grid, file.path(output_dir, "expectation_grid.rds")) 

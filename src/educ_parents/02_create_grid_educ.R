@@ -43,12 +43,12 @@ outcome_source <- tribble(
   "c11_class_income_below_50th",    FALSE,       "elementary_school_cohort",
   "c11_class_income_above_75th",    FALSE,       "elementary_school_cohort",
   
-  "c00_sga",                        TRUE,       "perinatal_cohort",
-  "c00_preterm_birth",              TRUE,       "perinatal_cohort",
+  "c00_sga",                        TRUE,        "perinatal_cohort",
+  "c00_preterm_birth",              TRUE,        "perinatal_cohort",
   
-  "c00_perinatal_mortality",        TRUE,       "child_mortality_cohort",
-  "c00_neonatal_mortality",         TRUE,       "child_mortality_cohort",
-  "c00_infant_mortality",           TRUE,       "child_mortality_cohort"
+  "c00_perinatal_mortality",        TRUE,        "child_mortality_cohort",
+  "c00_neonatal_mortality",         TRUE,        "child_mortality_cohort",
+  "c00_infant_mortality",           TRUE,        "child_mortality_cohort"
 )
 
 
@@ -64,16 +64,6 @@ household_groups <- c("all", "single parent", "two parents")
 pc4_tab <- read_spss(pwr_location) %>% select(postc)
 gwb_tab <- read_spss(gwb_location) %>% select(-postcode_crypt) %>% distinct()
 corop_tab <- read_xlsx(corop_location)
-
-
-# convert to gemeente-indeling 2023
-gwb_tab <- 
-  gwb_tab %>% 
-  mutate(gemcode = 
-           ifelse(gemcode %in% c("0501", "0530", "0614"), 
-                  "1992", gemcode), 
-         gemcode = ifelse(gemcode == '0457', "0363", gemcode))
-
 
 
 regions <- tribble(
@@ -118,8 +108,6 @@ model_grid <-
                               paste0(region_type, '_birth'), region_type)) %>%
   mutate(region_type = as_factor(region_type))
 
-
-table(model_grid$region_type)
 
 # Write the entire model grid as a feather file (can be read by row or by column)
 write_feather(model_grid, "input/educ/model_grid.feather")

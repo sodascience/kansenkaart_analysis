@@ -51,8 +51,6 @@ rm(students_cohort)
 cat("Processing high school cohort...\n")
 high_school_cohort <- read_rds(file.path(raw_data_dir, "high_school_cohort.rds"))
 cat("Size before processing: ", format(object.size(high_school_cohort), "MB"), "\n")
-# high_school_cohort <- high_school_cohort %>% 
-# rename(has_migration = has_migration_background)
 high_school_cohort <- 
   high_school_cohort %>%
   ungroup() %>% 
@@ -77,21 +75,6 @@ elementary_school_cohort <-
 elementary_school_cohort %>% write_rds(file.path(processed_dir, "elementary_school_cohort.rds"))
 cat("Size after processing: ", format(object.size(elementary_school_cohort), "MB"), "\n\n")
 rm(elementary_school_cohort)
-
-
-#### CLASSROOM COHORT ####
-cat("Processing classroom cohort...\n")
-classroom_cohort <- read_rds(file.path(raw_data_dir, "classroom_cohort.rds"))
-cat("Size before processing: ", format(object.size(classroom_cohort), "MB"), "\n")
-classroom_cohort <- 
-  classroom_cohort %>%
-  ungroup() %>% 
-  select(RINPERSOONS, RINPERSOON, all_of(predictor_vars), parents_education, 
-         all_of(filter_edu_vars), all_of(region_vars), starts_with("c11_")) %>% 
-  mutate(across(all_of(region_vars), as.factor)) 
-classroom_cohort %>% write_rds(file.path(processed_dir, "classroom_cohort.rds"))
-cat("Size after processing: ", format(object.size(classroom_cohort), "MB"), "\n\n")
-rm(classroom_cohort)
 
 
 #### PERINATAL COHORT ####
