@@ -22,3 +22,11 @@ This is a work in progress!
 3. Check how many jobs are needed (`nrow(model_grid) / batch_size`)
 2. Create an array job using `array_job.sh`. 
 
+## Contact
+This project is developed and maintained by the [ODISSEI Social Data Science
+(SoDa)](https://odissei-data.nl/nl/soda/) team.
+
+Do you have questions, suggestions, or remarks? File an issue in the issue
+tracker or feel free to contact [Erik-Jan van
+Kesteren](https://github.com/vankesteren)
+([@ejvankesteren](https://twitter.com/ejvankesteren)) or [Helen Lam](https://github.com/Helenlam20).
