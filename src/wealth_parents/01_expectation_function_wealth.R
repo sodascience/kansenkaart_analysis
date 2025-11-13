@@ -9,8 +9,9 @@
 #' @param wealth_grp parental wealth percentile group: "low", "mid", "high" or "all"
 #' @param migration_grp migration background group: e.g., "Nederland", "Marokko", "Suriname" or "all"
 #' @param gender_grp gender group: "Mannen", "Vrouwen", or "all"
-#' @param hh_grp household type group: ...
+#' @param hh_grp household type group: "all", "single parent", "two parents", "other"
 #' @param conf_level the confidence level of the confidence interval around the estimate
+#' 
 #' 
 #' @returns a column matrix with the following elements in order: 
 #' - expectation (estimate)
@@ -20,37 +21,40 @@
 
 kansenkaart_expect <- function(cohort_dat, outcome_name, 
                                region_id = "all", region_type = "all", 
-                               wealth_grp = "all", migration_grp = "all", 
-                               gender_grp = "all", hh_grp = "all", 
+                               wealth_grp = "all", migration_grp = "all",
+                               gender_grp = "all", hh_grp = "all",
                                conf_level = 0.95) {
   
   # Step 1: data filtering ----
-  ## income group ----
-  if (wealth_grp != "all") {
+  ## wealth group ----
+  if (wealth_grp %in% c("Low", "Mid", "High")) {
     cohort_dat <- cohort_dat %>% filter(wealth_group == wealth_grp)
+  } else if (wealth_grp %in% c("Very_Low", "Very_High")) {
+    cohort_dat <- cohort_dat %>% filter(wealth_group_tails == wealth_grp)
   }
   
   ## migration group ----
   if (!migration_grp %in% c("all", "has_migration")) {
-    cohort_dat <- cohort_dat %>% filter(migration_third == migration_grp)
+    cohort_dat <- cohort_dat %>% filter(migration_background == migration_grp)
   } else if (migration_grp == "has_migration") {
     cohort_dat <- cohort_dat %>% filter(has_migration == 1)
   }
-
+  
   
   ## gender ----
   if (gender_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(geslacht == gender_grp)
+    cohort_dat <- cohort_dat %>% filter(sex == gender_grp)
   }
   
   ## region ----
   if (region_type != "all") {
     cohort_dat <- cohort_dat %>% filter(.data[[region_type]] == region_id)
+    
   }
   
-  ## household group ----
+  ## household ----
   if (hh_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(type_hh == hh_grp)
+    cohort_dat <- cohort_dat %>% filter(type_household == hh_grp)
   }    
   
   # Step 2: model fitting ----
@@ -66,13 +70,15 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   
   # Step 3: expectation ----
-  ## At what parental income do we predict?
+  ## At what parental wealth do we predict?
   new_data <- switch(
-    EXPR = wealth_grp, 
-    all  = tibble(1),
-    Low  = tibble(wealth_parents_perc = 0.25),
-    Mid  = tibble(wealth_parents_perc = 0.50),
-    High = tibble(wealth_parents_perc = 0.75)
+    EXPR      = wealth_grp, 
+    all       = tibble(1),
+    Very_Low  = tibble(wealth_parents_perc = 0.10),
+    Low       = tibble(wealth_parents_perc = 0.25),
+    Mid       = tibble(wealth_parents_perc = 0.50),
+    High      = tibble(wealth_parents_perc = 0.75),
+    Very_High = tibble(wealth_parents_perc = 0.90)
   )
   
   ## Create prediction matrix
@@ -95,3 +101,6 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   )
   return(result)
 }
+
+
+

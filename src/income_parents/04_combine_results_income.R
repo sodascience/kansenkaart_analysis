@@ -39,7 +39,7 @@ for (fn in files) {
 }
 
 # write the results to disk
-write_rds(model_grid, file.path(output_dir, "expectation_grid.rds")) 
+#write_rds(model_grid, file.path(output_dir, "expectation_grid.rds")) 
 # CHANGE FILE PATHS
 
 

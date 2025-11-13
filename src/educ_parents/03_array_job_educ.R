@@ -31,7 +31,7 @@ tcat("Setting up chunks")
 # each node has 128 cores, use 96
 n_cores  <- 96
 # each core can estimate about 14 models per second
-mod_rate <- 4
+mod_rate <- 5
 # we want to run each job for about 1 hour (3600 seconds)
 job_time <- 3600
 # get final chunk size
