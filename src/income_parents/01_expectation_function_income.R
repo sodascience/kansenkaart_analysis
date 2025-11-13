@@ -27,13 +27,15 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   # Step 1: data filtering ----
   ## income group ----
-  if (income_grp != "all") {
+  if (income_grp %in% c("Low", "Mid", "High")) {
     cohort_dat <- cohort_dat %>% filter(income_group == income_grp)
+  } else if (income_grp %in% c("Very_Low", "Very_High")) {
+    cohort_dat <- cohort_dat %>% filter(income_group_tails == income_grp)
   }
   
   ## migration group ----
   if (!migration_grp %in% c("all", "has_migration")) {
-    cohort_dat <- cohort_dat %>% filter(migration_third == migration_grp)
+    cohort_dat <- cohort_dat %>% filter(migration_background == migration_grp)
   } else if (migration_grp == "has_migration") {
     cohort_dat <- cohort_dat %>% filter(has_migration == 1)
   }
@@ -41,7 +43,7 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   ## gender ----
   if (gender_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(geslacht == gender_grp)
+    cohort_dat <- cohort_dat %>% filter(sex == gender_grp)
   }
   
   ## region ----
@@ -52,7 +54,7 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   ## household ----
   if (hh_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(type_hh == hh_grp)
+    cohort_dat <- cohort_dat %>% filter(type_household == hh_grp)
   }    
   
   # Step 2: model fitting ----
@@ -70,11 +72,13 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   # Step 3: expectation ----
   ## At what parental income do we predict?
   new_data <- switch(
-    EXPR = income_grp, 
-    all  = tibble(1),
-    Low  = tibble(income_parents_perc = 0.25),
-    Mid  = tibble(income_parents_perc = 0.50),
-    High = tibble(income_parents_perc = 0.75)
+    EXPR      = income_grp, 
+    all       = tibble(1),
+    Very_Low  = tibble(income_parents_perc = 0.10),
+    Low       = tibble(income_parents_perc = 0.25),
+    Mid       = tibble(income_parents_perc = 0.50),
+    High      = tibble(income_parents_perc = 0.75),
+    Very_High = tibble(income_parents_perc = 0.90)
   )
   
   ## Create prediction matrix

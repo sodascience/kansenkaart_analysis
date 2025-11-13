@@ -4,6 +4,7 @@
 # R script for computing expectations in slurm array jobs
 # usage: Rscript 03_array_job.R $SLURM_ARRAY_TASK_ID input
 
+
 # Setting up logging ----
 start <- Sys.time()
 tcat <- function(...) {
@@ -29,13 +30,14 @@ tcat("task_id =", task_id, "; data_dir =", data_dir)
 tcat("Setting up chunks")
 # first we compute how many models to run on this node
 # each node has 128 cores, use 96
-n_cores  <- 120
+n_cores  <- 96
 # each core can estimate about 14 models per second
 mod_rate <- 5
 # we want to run each job for about 1 hour (3600 seconds)
 job_time <- 3600
 # get final chunk size
 chunk_size <- n_cores*mod_rate*job_time
+
 
 # then we get the current task id and assign the right chunk to the current job
 n_total   <- feather_metadata(file.path(data_dir, "wealth/model_grid.feather"))$dim[1]

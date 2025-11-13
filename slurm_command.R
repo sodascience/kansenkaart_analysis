@@ -1,8 +1,8 @@
 library(feather)
 
 # job command for slurm
-# each node has 24 cores
-n_cores  <- 72
+# each node has 24 cores (24, 48, 72, 96, 120)
+n_cores  <- 64
 # each core can estimate about 1 model per second
 mod_rate <- 5
 # we want to run each job for about 1 hours (3600 seconds)
@@ -11,9 +11,9 @@ job_time <- 3600
 chunk_size <- n_cores*mod_rate*job_time
 
 # get grid length
-# N <- feather_metadata("input/income/model_grid.feather")$dim[1]
-N <- feather_metadata("input/wealth/model_grid.feather")$dim[1]
-# N <- feather_metadata("input/educ/model_grid.feather")$dim[1]
+N <- feather_metadata("input/income/model_grid.feather")$dim[1]
+#N <- feather_metadata("input/wealth/model_grid.feather")$dim[1]
+#N <- feather_metadata("input/educ/model_grid.feather")$dim[1]
 
 
 # number of jobs

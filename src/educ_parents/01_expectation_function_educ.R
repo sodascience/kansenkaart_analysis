@@ -32,14 +32,14 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   ## migration group ----
   if (!migration_grp %in% c("all", "has_migration")) {
-    cohort_dat <- cohort_dat %>% filter(migration_third == migration_grp)
+    cohort_dat <- cohort_dat %>% filter(migration_background == migration_grp)
   } else if (migration_grp == "has_migration") {
     cohort_dat <- cohort_dat %>% filter(has_migration == 1)
   }
   
   ## gender ----
   if (gender_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(geslacht == gender_grp)
+    cohort_dat <- cohort_dat %>% filter(sex == gender_grp)
   }
   
   ## region ----
@@ -49,7 +49,7 @@ kansenkaart_expect <- function(cohort_dat, outcome_name,
   
   ## household ----
   if (hh_grp != "all") {
-    cohort_dat <- cohort_dat %>% filter(type_hh == hh_grp)
+    cohort_dat <- cohort_dat %>% filter(type_household == hh_grp)
   }   
 
   

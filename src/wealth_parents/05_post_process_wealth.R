@@ -1,5 +1,9 @@
 # post-process results 
 library(tidyverse)
+library(progress)
+library(writexl)
+library(stringr)
+
 
 data_dir <- "input/wealth"
 output_dir <- "output/wealth"
@@ -11,15 +15,24 @@ expectation_grid <- read_rds(file.path(output_dir, "expectation_grid.rds"))
 expectation_grid <- 
   expectation_grid %>% 
   mutate(
-    not_disclose = ifelse(binary == "TRUE", (est*n < 10 | (1-est)*n < 10), n < 25),
+    not_disclose = ifelse(binary == "TRUE", (est*n < 10 | (1-est)*n < 10), n < 10),
     est = ifelse(not_disclose, NA, est),
     lwr = ifelse(not_disclose, NA, lwr),
     upr = ifelse(not_disclose, NA, upr),
     n   = ifelse(not_disclose, NA, n)
+  ) 
+
+
+# remove estimates with 0
+expectation_grid <- 
+  expectation_grid %>% 
+  mutate(
+    lwr = ifelse(est == 0, NA, lwr),
+    upr = ifelse(est == 0, NA, upr),
+    n   = ifelse(est == 0, NA, n),
+    est = ifelse(est == 0, NA, est),
   ) %>%
   filter(!is.na(n))
-
-# write_rds(expectation_grid, file.path(output_dir, "expectation_grid_controlled.rds"))
 
 
 # Separate (outcome files per region) ----
